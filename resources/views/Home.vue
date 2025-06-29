@@ -51,11 +51,9 @@ const getUser = computed(() => {
 async function submit() {
     loading.value = true;
     try {
-        const response = await logoutApi();
+        await logoutApi();
 
-        console.log(response);
-
-        router.push("/");
+        router.replace("/login");
     } catch (exception) {
         console.log(exception);
     } finally {

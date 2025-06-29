@@ -16,7 +16,7 @@ class AutenticationController extends Controller
         $userModel = new User();
 
         $user = $userModel->getUserForEmail($request->input("email"));
-        if (!$user && !Hash::check($request->input("senha"), $user->senha)) {
+        if (!$user || !Hash::check($request->input("senha"), $user->senha)) {
             throw new LoginException();
         }
 
@@ -38,10 +38,13 @@ class AutenticationController extends Controller
     }
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+        }
 
         return response()->json([
             'success' => true,
+            'code' => 200,
             'message' => 'Logout da sessão atual realizado com sucesso!',
         ]);
     }

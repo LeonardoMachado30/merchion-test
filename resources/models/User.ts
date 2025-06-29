@@ -10,3 +10,9 @@ export interface UserResume {
     email: string;
     senha: string;
 }
+
+export interface UserRegister {
+    nome: string;
+    email: string;
+    senha: string;
+}

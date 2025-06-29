@@ -3,13 +3,20 @@
         <form
             method="POST"
             @submit.prevent="submit"
-            class="flex flex-col items-center justify-center gap-4 relative mt-[40%]"
+            class="flex flex-col items-center justify-center gap-4 relative mt-[20%]"
         >
             <img
                 src="../assets/images/merchion-logo.png"
                 width="200"
                 height="200"
                 alt="logo"
+            />
+
+            <MInput
+                v-model="nome"
+                type="text"
+                class="rounded-md w-full bg-[#D9D9D9] px-4 py-2"
+                placeholder="Nome completo:"
             />
 
             <MInput
@@ -48,15 +55,17 @@
                 </MInput>
             </div>
 
-            <p v-if="loginError" class="text-[#FF1808] text-sm">
-                Email ou senha incorreto.
+            <p v-if="registerError" class="text-[#FF1808] text-sm">
+                {{ errorMessage }}
             </p>
 
             <button
                 class="bg-[#FF1808] w-full rounded-md py-2 text-white flex items-center justify-center"
-                :class="[!email || !senha || loading ? 'opacity-75' : '']"
+                :class="[
+                    !nome || !email || !senha || loading ? 'opacity-75' : '',
+                ]"
                 type="submit"
-                :disabled="!email || !senha || loading"
+                :disabled="!nome || !email || !senha || loading"
             >
                 <span v-if="loading" class="flex items-center">
                     <img
@@ -67,14 +76,14 @@
                     />
                     Carregando...
                 </span>
-                <span v-else> Entrar </span>
+                <span v-else> Cadastrar </span>
             </button>
 
             <a
-                href="/cadastrar"
+                href="/login"
                 class="bg-[#D14723] w-full rounded-md py-2 text-white text-center"
             >
-                Cadastrar
+                Já tenho conta
             </a>
         </form>
     </section>
@@ -83,30 +92,41 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { loginApi } from "../api/authentication";
+import { registerApi } from "../api/authentication";
+import type { UserRegister } from "../models/User";
 import MInput from "../components/MInput.vue";
 import visibilityIcon from "../assets/icons/visibility.svg";
 import visibilityOffIcon from "../assets/icons/visibilityOff.svg";
 
 const router = useRouter();
 
+const nome = ref("");
 const email = ref("");
 const senha = ref("");
 const mostrarSenha = ref(false);
 const loading = ref(false);
-const loginError = ref(false);
+const registerError = ref(false);
+const errorMessage = ref("");
 
 async function submit() {
     loading.value = true;
+    registerError.value = false;
+
     try {
-        const response = await loginApi({
+        const userData: UserRegister = {
+            nome: nome.value,
             email: email.value,
             senha: senha.value,
-        });
+        };
 
-        router.push("/");
-    } catch (exception) {
-        loginError.value = true;
+        const response = await registerApi(userData);
+
+        // Após cadastro bem-sucedido, redireciona para login
+        router.push("/login");
+    } catch (exception: any) {
+        registerError.value = true;
+        errorMessage.value =
+            exception.response?.data?.message || "Erro ao cadastrar usuário.";
         console.log(exception);
     } finally {
         loading.value = false;

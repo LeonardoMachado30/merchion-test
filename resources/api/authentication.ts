@@ -1,5 +1,6 @@
+import { useRouter } from "vue-router";
 import api from ".";
-import type { UserResume } from "@/models/User";
+import type { UserResume, UserRegister } from "@/models/User";
 
 export async function loginApi({ email, senha }: UserResume) {
     try {
@@ -28,19 +29,31 @@ export async function logoutApi() {
         const getToken = localStorage.getItem("token");
         const response = await api.post("/logout", null, {
             headers: {
-                Authorization: `Bearer ${getToken}`,
+                Authorization: `${getToken}`,
             },
         });
-
-        if (response.data.code === 200 || response.data.code === 400) {
+        console.log(response);
+        if (response.data.code === 200) {
             localStorage.removeItem("user");
             localStorage.removeItem("token");
-
             return true;
         }
     } catch (exception) {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+        console.error(exception);
+        throw exception;
+    }
+}
+
+export async function registerApi({ nome, email, senha }: UserRegister) {
+    try {
+        const response = await api.post("/create", { nome, email, senha });
+
+        if (response.data.code === 200) {
+            return response.data;
+        }
+    } catch (exception) {
         console.error(exception);
         throw exception;
     }

@@ -162,6 +162,10 @@ yarn dev
 
 ### Exemplo de uso (Postman)
 
+```bash
+    Existe um arquivo chamado "MERCHION-TEST.postman_collection.json" no root para testar no postman
+```
+
 **Cadastro:**
 
 ```json

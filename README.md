@@ -58,7 +58,7 @@ Siga os passos abaixo para configurar e rodar o projeto.
 
 ```bash
 # Clone o repositório
-git clone https://github.com/SeuUsuario/merchion-test.git
+git clone https://github.com/LeonardoMachado30/merchion-test.git
 cd merchion-test
 
 # Copie o arquivo de ambiente para o backend

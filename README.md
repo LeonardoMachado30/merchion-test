@@ -96,14 +96,9 @@ Use esta opção se você preferir não usar Docker e já tiver um ambiente PHP 
 # 1. Instale as dependências do PHP
 composer install
 
-# 2. Configure o banco de dados no arquivo .env
-#    Edite as seguintes variáveis com os dados do seu banco local:
-#    DB_CONNECTION=mysql
-#    DB_HOST=127.0.0.1
-#    DB_PORT=3306
-#    DB_DATABASE=laravel
-#    DB_USERNAME=root
-#    DB_PASSWORD=
+# 2. Configure o banco de dados no arquivo .env (O nome do arquivo é env.exemple para rodar)
+- ATENÇÂO: Se for usar o docker o DB_HOST deve ser "db" é caso deseje rodar local o DB_HOST deve ser "root", as demais variaveis podem ser as mesmas
+(link .env)[https://docs.google.com/document/d/12CRc7UWEhgfMi1V_M_23kQDmaN8QB3_8NDBhOqC1oK0/edit?usp=sharing]
 
 # 3. Gere a chave da aplicação Laravel
 php artisan key:generate
